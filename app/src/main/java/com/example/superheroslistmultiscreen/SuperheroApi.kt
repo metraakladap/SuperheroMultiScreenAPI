@@ -1,4 +1,4 @@
-package com.example.superheroeslist
+package com.example.superheroslistmultiscreen
 
 import com.example.superheroslistmultiscreen.Superhero
 import io.reactivex.rxjava3.core.Single
