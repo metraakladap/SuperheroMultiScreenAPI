@@ -53,4 +53,9 @@ dependencies {
     implementation ("io.reactivex.rxjava3:rxandroid:3.0.0")
     implementation ("com.github.bumptech.glide:glide:4.12.0")
     implementation ("androidx.recyclerview:recyclerview:1.2.1")
+
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.4")
+
+   //Coroutines
+
 }

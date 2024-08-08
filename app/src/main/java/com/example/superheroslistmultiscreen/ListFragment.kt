@@ -6,16 +6,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
-import io.reactivex.rxjava3.disposables.CompositeDisposable
-import io.reactivex.rxjava3.schedulers.Schedulers
+import kotlinx.coroutines.launch
 
 class ListFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: SuperheroAdapter
-    private val disposable = CompositeDisposable()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_list, container, false)
@@ -30,20 +28,13 @@ class ListFragment : Fragment() {
     }
 
     private fun loadSuperheros() {
-        disposable.add(
-        RetrofitClient.getApi().getSuperheros()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({ superheros ->
+        lifecycleScope.launch {
+            try {
+                val superheros = MyApplication.getApp().repo.getSuperheros()
                 adapter.submitList(superheros)
-            }, { error ->
+            } catch (error: Exception) {
                 Log.e("ListFragment", "Error loading superheros", error)
-            })
-        )
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        disposable.dispose()
+            }
+        }
     }
 }
