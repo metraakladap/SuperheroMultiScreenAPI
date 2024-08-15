@@ -2,10 +2,10 @@ package com.example.superheroslistmultiscreen
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import dagger.hilt.android.AndroidEntryPoint
 
-
-class MainActivity : AppCompatActivity(), SuperheroSelectionListener {
-    private var selectedSuperhero: Superhero? = null
+@AndroidEntryPoint
+class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -17,20 +17,4 @@ class MainActivity : AppCompatActivity(), SuperheroSelectionListener {
                 .commit()
         }
     }
-
-    override fun onSuperheroSelected(superhero: Superhero) {
-        selectedSuperhero = superhero
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.fragment_container, DetailsFragment())
-            .addToBackStack(null)
-            .commit()
-    }
-
-    fun getSelectedSuperhero(): Superhero? {
-        return selectedSuperhero
-    }
-}
-
-interface SuperheroSelectionListener {
-    fun onSuperheroSelected(superhero: Superhero)
 }

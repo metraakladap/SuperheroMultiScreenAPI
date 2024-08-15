@@ -27,8 +27,7 @@ class SuperheroViewModel @Inject constructor(
                 _superheros.value = repository.getSuperheros()
             } catch (e: Exception) {
                 Log.e("SuperheroViewModel", "Error loading superheros", e)
-                delay(2000)
-                loadSuperheros()
+
             }
         }
     }

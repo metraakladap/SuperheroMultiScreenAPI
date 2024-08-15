@@ -7,8 +7,11 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import com.bumptech.glide.Glide
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class DetailsFragment : Fragment() {
     private lateinit var imageView: ImageView
     private lateinit var nameTextView: TextView
@@ -16,8 +19,13 @@ class DetailsFragment : Fragment() {
     private lateinit var publisherTextView: TextView
     private lateinit var firstAppearanceTextView: TextView
     private lateinit var powerstatsTextView: TextView
+    private val viewModel: SuperheroViewModel by activityViewModels()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         val view = inflater.inflate(R.layout.fragment_details, container, false)
         imageView = view.findViewById(R.id.superhero_image)
         nameTextView = view.findViewById(R.id.superhero_name)
@@ -30,21 +38,23 @@ class DetailsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val superhero = (activity as? MainActivity)?.getSelectedSuperhero()
-        superhero?.let {
-            nameTextView.text = it.name
-            fullNameTextView.text = "Full Name: ${it.biography.fullName}"
-            publisherTextView.text = "Publisher: ${it.biography.publisher}"
-            firstAppearanceTextView.text = "First Appearance: ${it.biography.firstAppearance}"
-            powerstatsTextView.text = """
-                Intelligence: ${it.powerstats.intelligence}
-                Strength: ${it.powerstats.strength}
-                Speed: ${it.powerstats.speed}
-                Durability: ${it.powerstats.durability}
-                Power: ${it.powerstats.power}
-                Combat: ${it.powerstats.combat}
-            """.trimIndent()
-            Glide.with(this).load(it.images.lg).into(imageView)
+        viewModel.selectedSuperhero.observe(viewLifecycleOwner) { superhero ->
+            superhero?.let {
+                nameTextView.text = it.name
+                fullNameTextView.text = "Full Name: ${it.biography.fullName}"
+                publisherTextView.text = "Publisher: ${it.biography.publisher}"
+                firstAppearanceTextView.text = "First Appearance: ${it.biography.firstAppearance}"
+                powerstatsTextView.text = """
+    Intelligence: ${it.powerstats.intelligence}
+    Strength: ${it.powerstats.strength}
+    Speed: ${it.powerstats.speed}
+    Durability: ${it.powerstats.durability}
+    Power: ${it.powerstats.power}
+    Combat: ${it.powerstats.combat}
+""".trimIndent()
+
+                Glide.with(this).load(it.images.lg).into(imageView)
+            }
         }
     }
 }
