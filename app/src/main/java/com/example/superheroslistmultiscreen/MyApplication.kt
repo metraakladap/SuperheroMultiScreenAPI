@@ -1,7 +1,9 @@
 package com.example.superheroslistmultiscreen
 
 import android.app.Application
+import dagger.hilt.android.HiltAndroidApp
 
+@HiltAndroidApp
 class MyApplication : Application(){
     lateinit var repo: SuperheroRepository
     override fun onCreate() {
